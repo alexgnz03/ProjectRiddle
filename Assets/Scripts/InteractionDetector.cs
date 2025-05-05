@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class InteractionDetector : MonoBehaviour
 {
-    private IInteractable interactableInRange = null;
+    public static IInteractable interactableInRange { get; private set; } = null;
     public GameObject interactionIcon;
 
     // Start is called before the first frame update
@@ -16,10 +16,10 @@ public class InteractionDetector : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        interactionIcon.SetActive(false);
         Debug.Log("OnInteract");
-        if(context.performed)
+        if(context.performed && !InventoryController.inventoryIsOpen)
         {
+            interactionIcon.SetActive(false);
             interactableInRange?.Interact();
         }
        

@@ -10,6 +10,9 @@ public class InventoryController : MonoBehaviour
     public GameObject[] itemPrefabs;
     public GameObject cursorPrefab;
 
+    public static bool inventoryIsOpen = false;
+    public static bool playerIsInteracting = false;
+
     private InventoryCursor invCursor;
     private List<Slot> slots = new List<Slot>();
 

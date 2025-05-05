@@ -10,9 +10,19 @@ public class NPC : MonoBehaviour, IInteractable
     public GameObject dialoguePanel;
     public TMP_Text dialogueText, nameText;
     public Image portraitImage;
+    public GameObject correctObject;
 
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
+    private string[] currentDialogue;
+
+    void Start()
+    {
+        if (dialogueData == null)
+            return;
+
+        currentDialogue = dialogueData.dialogueLines;
+    }
 
     public bool CanInteract()
     {
@@ -28,13 +38,42 @@ public class NPC : MonoBehaviour, IInteractable
 
         if (isDialogueActive)
         {
-            NextLine();
+            NextLine(currentDialogue);
         }
-        else
+        else if (isDialogueActive == false)
         {
             StartDialogue();
         }
+
+        currentDialogue = dialogueData.dialogueLines;
     }
+
+    public void ShowObject(GameObject showedObject)
+    {
+        if (showedObject != null)
+        {
+            Debug.Log("Mostrando Objeto " + showedObject.name + " al NPC");
+            if (showedObject.GetComponent<Item>().itemData.itemName == correctObject.GetComponent<Item>().itemData.itemName)
+            {
+                Debug.Log("El objeto es correcto");
+                currentDialogue = dialogueData.correctObjectLines;
+                Interact();
+            }
+            else
+            {
+                Debug.Log("El objeto es erróneo: " + correctObject);
+                currentDialogue = dialogueData.wrongObjectLines;
+                Interact();
+            }
+        }
+        else
+        {
+            Debug.Log("No hay objeto en el espacio elegido");
+        }
+        
+    }
+
+    //Lógica de escritura
 
     void StartDialogue()
     {
@@ -47,24 +86,26 @@ public class NPC : MonoBehaviour, IInteractable
         dialoguePanel.SetActive(true);
         PauseController.SetPause(dialoguePanel.activeSelf);
 
-        StartCoroutine(TypeLine());
+        StartCoroutine(TypeLine(currentDialogue));
+
+        InventoryController.playerIsInteracting = true;
 
         Debug.Log("Empezó el diálogo");
     }
 
-    void NextLine()
+    void NextLine(string[] dialogue)
     {
         if (isTyping)
         {
             //Skipear animación de texto
             StopAllCoroutines();
-            dialogueText.SetText(dialogueData.dialogueLines[dialogueIndex]);
+            dialogueText.SetText(dialogue[dialogueIndex]);
             isTyping = false;
         }
-        else if(++dialogueIndex < dialogueData.dialogueLines.Length)
+        else if(++dialogueIndex < dialogue.Length)
         {
             //Si hay otra línea, escribirla
-            StartCoroutine(TypeLine());
+            StartCoroutine(TypeLine(dialogue));
         }
         else
         {
@@ -72,12 +113,12 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    IEnumerator TypeLine()
+    IEnumerator TypeLine(string[] dialogue)
     {
         isTyping = true;
         dialogueText.SetText("");
 
-        foreach (char letter in dialogueData.dialogueLines[dialogueIndex])
+        foreach (char letter in dialogue[dialogueIndex])
         {
             dialogueText.text += letter;
             yield return new WaitForSeconds(dialogueData.typingSpeed);
@@ -88,7 +129,7 @@ public class NPC : MonoBehaviour, IInteractable
         if(dialogueData.autoProgressLines.Length > dialogueIndex && dialogueData.autoProgressLines[dialogueIndex])
         {
             yield return new WaitForSeconds(dialogueData.autoProgressDelay);
-            NextLine();
+            NextLine(currentDialogue);
         }
     }
 
@@ -99,5 +140,7 @@ public class NPC : MonoBehaviour, IInteractable
         dialogueText.SetText("");
         dialoguePanel.SetActive(false);
         PauseController.SetPause(dialoguePanel.activeSelf);
+
+        InventoryController.playerIsInteracting = false;
     }
 }

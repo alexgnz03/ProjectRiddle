@@ -127,6 +127,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""88ddca47-a15d-4d83-90dd-ad28dd4e542b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -184,6 +193,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""CursorMovement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32459e8b-9e1e-44c5-b28e-ee63a412b2c7"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -197,6 +217,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         // OnMenu
         m_OnMenu = asset.FindActionMap("OnMenu", throwIfNotFound: true);
         m_OnMenu_CursorMovement = m_OnMenu.FindAction("CursorMovement", throwIfNotFound: true);
+        m_OnMenu_Interact = m_OnMenu.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -298,11 +319,13 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_OnMenu;
     private IOnMenuActions m_OnMenuActionsCallbackInterface;
     private readonly InputAction m_OnMenu_CursorMovement;
+    private readonly InputAction m_OnMenu_Interact;
     public struct OnMenuActions
     {
         private @PlayerInput m_Wrapper;
         public OnMenuActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @CursorMovement => m_Wrapper.m_OnMenu_CursorMovement;
+        public InputAction @Interact => m_Wrapper.m_OnMenu_Interact;
         public InputActionMap Get() { return m_Wrapper.m_OnMenu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -315,6 +338,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @CursorMovement.started -= m_Wrapper.m_OnMenuActionsCallbackInterface.OnCursorMovement;
                 @CursorMovement.performed -= m_Wrapper.m_OnMenuActionsCallbackInterface.OnCursorMovement;
                 @CursorMovement.canceled -= m_Wrapper.m_OnMenuActionsCallbackInterface.OnCursorMovement;
+                @Interact.started -= m_Wrapper.m_OnMenuActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_OnMenuActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_OnMenuActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_OnMenuActionsCallbackInterface = instance;
             if (instance != null)
@@ -322,6 +348,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @CursorMovement.started += instance.OnCursorMovement;
                 @CursorMovement.performed += instance.OnCursorMovement;
                 @CursorMovement.canceled += instance.OnCursorMovement;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -334,5 +363,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     public interface IOnMenuActions
     {
         void OnCursorMovement(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }

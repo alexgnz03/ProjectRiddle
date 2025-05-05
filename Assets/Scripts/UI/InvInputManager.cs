@@ -16,6 +16,9 @@ public class InvInputManager : MonoBehaviour
         playerInput = new PlayerInput();
         onMenu = playerInput.OnMenu;
         cursor = GetComponent<InventoryCursor>();
+
+        // Vincula la acción de interactuar al método
+        onMenu.Interact.performed += ctx => cursor.Interact();
     }
 
     // Update is called once per frame
@@ -27,9 +30,13 @@ public class InvInputManager : MonoBehaviour
     private void OnEnable()
     {
         onMenu.Enable();
+        InventoryController.inventoryIsOpen = true;
+        Debug.Log("El inventario está abierto");
     }
     private void OnDisable()
     {
         onMenu.Disable();
+        InventoryController.inventoryIsOpen = false;
+        Debug.Log("El inventario está cerrado");
     }
 }

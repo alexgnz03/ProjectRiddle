@@ -7,7 +7,7 @@ public class InventoryCursor : MonoBehaviour
     private List<Slot> slots;
     public int slotID;
 
-    public float moveDelay = 0.3f; // tiempo entre movimientos permitidos (en segundos)
+    public float moveDelay = 0.2f; // tiempo entre movimientos permitidos (en segundos)
     private float lastMoveTime = 0f;
 
     public void ProcessMove(Vector2 input)
@@ -40,6 +40,12 @@ public class InventoryCursor : MonoBehaviour
             this.transform.SetParent(newSlotTransform);
             this.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         }
+    }
+
+    public void Interact()
+    {
+        Debug.Log("Interactuando con el objeto: " + slots[slotID].currentItem);
+        InteractionDetector.interactableInRange?.ShowObject(slots[slotID].currentItem);
     }
 
     //Getters y setters

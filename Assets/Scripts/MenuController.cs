@@ -16,7 +16,8 @@ public class MenuController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Tab))
         {
-            if(!menuCanvas.activeSelf && PauseController.IsGamePaused)
+            //TODO Revisar si al implementar el menu de pausa puedo intactuar, abrir el inventario, y pausar a la vez
+            if (!menuCanvas.activeSelf && PauseController.IsGamePaused && !InventoryController.playerIsInteracting) 
             {
                 return;
             }
