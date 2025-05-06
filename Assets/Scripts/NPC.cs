@@ -46,10 +46,12 @@ public class NPC : MonoBehaviour, IInteractable
         }
 
         currentDialogue = dialogueData.dialogueLines;
+        Debug.Log("El dialogueIndexen este momento es: " + dialogueIndex);
     }
 
     public void ShowObject(GameObject showedObject)
     {
+        Debug.Log("El dialogueIndex cuando muestro el objeto es: " + dialogueIndex);
         if (showedObject != null)
         {
             Debug.Log("Mostrando Objeto " + showedObject.name + " al NPC");
@@ -139,8 +141,10 @@ public class NPC : MonoBehaviour, IInteractable
         isDialogueActive = false;
         dialogueText.SetText("");
         dialoguePanel.SetActive(false);
-        PauseController.SetPause(dialoguePanel.activeSelf);
-
+        if (InventoryController.inventoryIsOpen == false) {
+            PauseController.SetPause(dialoguePanel.activeSelf);
+        }
+        
         InventoryController.playerIsInteracting = false;
     }
 }

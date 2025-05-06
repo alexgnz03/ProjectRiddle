@@ -6,9 +6,14 @@ public class InventoryCursor : MonoBehaviour
 {
     private List<Slot> slots;
     public int slotID;
-
+    public MenuController menuController;
     public float moveDelay = 0.2f; // tiempo entre movimientos permitidos (en segundos)
     private float lastMoveTime = 0f;
+
+    void Awake()
+    {
+        menuController = transform.root.GetComponent<MenuController>();
+    }
 
     public void ProcessMove(Vector2 input)
     {
@@ -46,6 +51,7 @@ public class InventoryCursor : MonoBehaviour
     {
         Debug.Log("Interactuando con el objeto: " + slots[slotID].currentItem);
         InteractionDetector.interactableInRange?.ShowObject(slots[slotID].currentItem);
+        menuController.menuCanvas.SetActive(false);
     }
 
     //Getters y setters
