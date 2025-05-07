@@ -44,8 +44,6 @@ public class NPC : MonoBehaviour, IInteractable
         {
             StartDialogue();
         }
-
-        currentDialogue = dialogueData.dialogueLines;
         Debug.Log("El dialogueIndexen este momento es: " + dialogueIndex);
     }
 
@@ -57,12 +55,14 @@ public class NPC : MonoBehaviour, IInteractable
             Debug.Log("Mostrando Objeto " + showedObject.name + " al NPC");
             if (showedObject.GetComponent<Item>().itemData.itemName == correctObject.GetComponent<Item>().itemData.itemName)
             {
+                isDialogueActive = false;
                 Debug.Log("El objeto es correcto");
                 currentDialogue = dialogueData.correctObjectLines;
                 Interact();
             }
             else
             {
+                isDialogueActive = false;
                 Debug.Log("El objeto es erróneo: " + correctObject);
                 currentDialogue = dialogueData.wrongObjectLines;
                 Interact();
@@ -146,5 +146,6 @@ public class NPC : MonoBehaviour, IInteractable
         }
         
         InventoryController.playerIsInteracting = false;
+        currentDialogue = dialogueData.dialogueLines;
     }
 }
