@@ -12,10 +12,13 @@ public class PlayerMotor : MonoBehaviour
     public float speed = defaultSpeed;
     public float gravity = -9.8f;
 
+    public PlayerAnimation playerAnimation;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        speed = -8f;
         controller = GetComponent<CharacterController>();
     }
 
@@ -42,6 +45,24 @@ public class PlayerMotor : MonoBehaviour
         playerVelocity.y += gravity * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
         //Debug.Log(playerVelocity.y);
+
+        ProcessAnimation(moveDirection);
+    }
+
+    private void ProcessAnimation (Vector3 moveDirection)
+    {
+        if (moveDirection.y < 0)
+        {
+            playerAnimation.AnimationStart(Direction.Down);
+        }
+        else if (moveDirection.y > 0) 
+        {
+            playerAnimation.AnimationStart(Direction.Up);
+        } 
+        else
+        {
+            playerAnimation.AnimationStop();
+        }
     }
 
 
