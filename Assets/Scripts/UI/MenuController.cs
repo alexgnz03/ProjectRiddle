@@ -9,6 +9,7 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         CloseMenu();
+        menuCanvas = MenuIdentifier.Instance.gameObject;
     }
 
     public void CloseMenu()
@@ -21,13 +22,18 @@ public class MenuController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Tab))
         {
-            //TODO Revisar si al implementar el menu de pausa puedo intactuar, abrir el inventario, y pausar a la vez
-            if (!menuCanvas.activeSelf && PauseController.IsGamePaused && !InventoryController.playerIsInteracting) 
-            {
-                return;
-            }
-            menuCanvas.SetActive(!menuCanvas.activeSelf);
-            PauseController.SetPause(menuCanvas.activeSelf);
+            OpenInventory();
         }
+    }
+
+    public void OpenInventory()
+    {
+        //TODO Revisar si al implementar el menu de pausa puedo intactuar, abrir el inventario, y pausar a la vez
+        if (!menuCanvas.activeSelf && PauseController.IsGamePaused && !InventoryController.playerIsInteracting)
+        {
+            return;
+        }
+        menuCanvas.SetActive(!menuCanvas.activeSelf);
+        PauseController.SetPause(menuCanvas.activeSelf);
     }
 }

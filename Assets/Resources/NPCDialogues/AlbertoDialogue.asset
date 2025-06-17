@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac9454011825d049a88ddd361d4caa1, type: 3}
+  m_Name: AlbertoDialogue
+  m_EditorClassIdentifier: 
+  npcName: Alberto
+  npcPortrait: {fileID: 0}
+  dialogueLines:
+  - AAAAAAAAAAAAAAAAAAAH
+  - "Qu\xE9 sed tengo..."
+  - "Oye t\xFA. No s\xE9 que haces en mi casa. Pero me puedes traer una bebida de
+    la m\xE1quina expendedora..."
+  - "Ir\xEDa yo mismo, pero me da mucha pereza..."
+  - "Menos mal. Pens\xE9 que me mor\xEDa de sed..."
+  - "\xBFEh? \xBFUna moneda?"
+  - "Debe haber alguna por alg\xFAn lado de aqu\xED pero no se donde..."
+  - "AAAAAAAAAAH, r\xE1pido, traeme mi bebida..."
+  - Uff, muchas gracias, pensaba que no lo contaba...
+  - "Veo que eres detective. \xBFEst\xE1s aqu\xED por lo del hotel de anoche \xBFCierto?"
+  - "Bueno, pues ya que me has ayudado, aqu\xED tienes una recompensa."
+  - "Hace un tiempo, antes de venir a vivir aqu\xED, estuve hospedado en ese hotel
+    y me trataron fatal."
+  - "As\xED que como venganza tom\xE9 prestada la llave de la puerta principal e
+    hice una copia."
+  - "Normalmente se la alquilo a chavales que quieren hacer gamberradas por un m\xF3dico
+    precio, pero ya que me has ayudado, te la dar\xE9 gratis."
+  correctObjectLines:
+  - "AAAAAAAAH, MI BEBIDA, D\xC1MELA POR FAVOR..."
+  wrongObjectLines:
+  - No se que es eso.
+  autoProgressLines: 0000000000000000000000000000
+  endDialogueLines: 0000000000000101000000000001
+  autoProgressDelay: 1.5
+  typingSpeed: 0.02
+  voiceSound: {fileID: 0}
+  voicePitch: 1
+  choices:
+  - dialogueIndex: 3
+    choices:
+    - "Est\xE1 bien, lo har\xE9."
+    - No me apetece...
+    nextDialogueIndexes: 0400000005000000
+    givesQuest: 0100
+  questIntProgressIndex: 7
+  questCompletedIndex: 8
+  quest: {fileID: 11400000, guid: 9b0d8bcce580ac84f9182dbb865ca937, type: 2}

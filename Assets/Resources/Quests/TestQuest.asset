@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca40d8d9c45c80646876011720068aeb, type: 3}
+  m_Name: TestQuest
+  m_EditorClassIdentifier: 
+  questID: Quest de pruebaa03370d7-1c48-418b-9230-d61bc42d6f24
+  questName: Quest de prueba
+  description: Esta quest es simplemente un test para ver el funcionamiento
+  objectives:
+  - objectiveID: 0
+    description: Hello Banana
+    type: 0
+    requiredAmount: 3
+    currentAmount: 2
+  questRewards:
+  - type: 0
+    rewardID: 1
+    amount: 1

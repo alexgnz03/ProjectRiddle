@@ -17,12 +17,25 @@ public class InteractionDetector : MonoBehaviour
     public void OnInteract(InputAction.CallbackContext context)
     {
         Debug.Log("OnInteract");
-        if(context.performed && !InventoryController.inventoryIsOpen)
+        if (context.performed && !InventoryController.inventoryIsOpen)
         {
             interactionIcon.SetActive(false);
-            interactableInRange?.Interact();
+
+            if (interactableInRange != null)
+            {
+                // Asegúrate de que el GameObject sigue existiendo
+                MonoBehaviour mb = interactableInRange as MonoBehaviour;
+                if (mb != null && mb.gameObject != null)
+                {
+                    interactableInRange.Interact();
+                }
+                else
+                {
+                    interactableInRange = null;
+                }
+            }
         }
-       
+
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -38,6 +51,15 @@ public class InteractionDetector : MonoBehaviour
     private void OnTriggerExit(Collider collision)
     {
         if (collision.TryGetComponent(out IInteractable interactable) && interactable == interactableInRange)
+        {
+            interactableInRange = null;
+            interactionIcon.SetActive(false);
+        }
+    }
+
+    public void ClearCurrentInteractable(IInteractable interactable)
+    {
+        if (interactableInRange == interactable)
         {
             interactableInRange = null;
             interactionIcon.SetActive(false);

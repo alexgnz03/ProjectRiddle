@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac9454011825d049a88ddd361d4caa1, type: 3}
+  m_Name: BettyDialogue
+  m_EditorClassIdentifier: 
+  npcName: Betty
+  npcPortrait: {fileID: 0}
+  dialogueLines:
+  - Mmm, pareces detective.
+  - "\xBFVienes por lo de anoche?"
+  - "Entiendo, hoy ha sido un d\xEDa duro de trabajo."
+  - Nosotros trabajamos para el hotel.
+  - "No demasiado, tan solo son un cliente m\xE1s de nuestra compa\xF1\xEDa."
+  - "Nos encargamos de desarrollar y gestionar el software, que usan para sus hu\xE9spedes..."
+  - "Aunque ahora que lo pienso, tenemos las bases de datos de los \xFAltimos d\xEDas."
+  - Normalmente no tenemos acceso a ella. Pero debido a lo de anoche, se nos ha dado
+    acceso total temporalmente.
+  - "Me encantar\xEDa ayudarte, pero entiende que es un tema delicado, y sin una
+    prueba contundente de que seas de verdad detective no puedo darte nada."
+  - "Adi\xF3s."
+  correctObjectLines:
+  - Entiendo, efectivamente eres detective.
+  - ...
+  - "Bueno, est\xE1 bien, aqu\xED tienes una copia de la base de datos de hu\xE9spedes
+    del hotel."
+  wrongObjectLines:
+  - "\xBFPara que me ense\xF1as eso?"
+  autoProgressLines: 00000000000000000000
+  endDialogueLines: 00000000000000000100
+  autoProgressDelay: 1.5
+  typingSpeed: 0.02
+  voiceSound: {fileID: 0}
+  voicePitch: 1
+  choices:
+  - dialogueIndex: 3
+    choices:
+    - "\xBFTienes algo que me pueda ser de ayuda?"
+    - Vale, nos vemos.
+    nextDialogueIndexes: 0400000009000000
+    givesQuest: 0000
+  - dialogueIndex: 7
+    choices:
+    - "\xBFMe podr\xEDas dar una copia?"
+    - Entiendo, debo irme.
+    nextDialogueIndexes: 0800000009000000
+    givesQuest: 0000
+  questIntProgressIndex: 0
+  questCompletedIndex: 0
+  quest: {fileID: 0}

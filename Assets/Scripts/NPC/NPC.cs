@@ -7,17 +7,26 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour, IInteractable
 {
     public NPCDialogues dialogueData;
-    public GameObject dialoguePanel;
-    public TMP_Text dialogueText, nameText;
-    public Image portraitImage;
     public GameObject correctObject;
-
+    private DialogueController dialogueUI;
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
     private string[] currentDialogue;
 
+    private enum giveItemCase { DontGive, EndDialogue, CorrectObject }
+    [SerializeField]
+    private giveItemCase giveItem = giveItemCase.DontGive;
+    [SerializeField]
+    private GameObject itemToGive;
+    private bool itemAlreadyGived = false;
+
+    private enum QuestState { NotStarted, InProgress, Completed}
+    private QuestState questState = QuestState.NotStarted;
+
     void Start()
     {
+        dialogueUI = DialogueController.Instance;
+
         if (dialogueData == null)
             return;
 
@@ -53,11 +62,17 @@ public class NPC : MonoBehaviour, IInteractable
         if (showedObject != null)
         {
             Debug.Log("Mostrando Objeto " + showedObject.name + " al NPC");
-            if (showedObject.GetComponent<Item>().itemData.itemName == correctObject.GetComponent<Item>().itemData.itemName)
+            if (showedObject.GetComponent<Item>().itemData == correctObject.GetComponent<Item>().itemData)
             {
                 isDialogueActive = false;
                 Debug.Log("El objeto es correcto");
                 currentDialogue = dialogueData.correctObjectLines;
+
+                if (giveItem == giveItemCase.CorrectObject && itemAlreadyGived == false)
+                {
+                    InventoryController.Instance.AddItem(itemToGive);
+                    itemAlreadyGived = true;
+                }
                 Interact();
             }
             else
@@ -79,20 +94,58 @@ public class NPC : MonoBehaviour, IInteractable
 
     void StartDialogue()
     {
+
+        //Sync with quest data
+        SyncQuestState();
+
+        //Set dialogue line based on questState
+        if(questState == QuestState.NotStarted)
+        {
+            dialogueIndex = 0;
+        }
+        else if(questState == QuestState.InProgress)
+        {
+            dialogueIndex = dialogueData.questIntProgressIndex;
+        }
+        else if(questState == QuestState.Completed)
+        {
+            dialogueIndex = dialogueData.questCompletedIndex;
+        }
+
+
         isDialogueActive = true;
-        dialogueIndex = 0;
 
-        nameText.SetText(dialogueData.npcName);
-        portraitImage.sprite = dialogueData.npcPortrait;
+        dialogueUI.SetNPCInfo(dialogueData.npcName, dialogueData.npcPortrait);
+        dialogueUI.ShowDialogueUI(true);
 
-        dialoguePanel.SetActive(true);
-        PauseController.SetPause(dialoguePanel.activeSelf);
+        PauseController.SetPause(true);
 
-        StartCoroutine(TypeLine(currentDialogue));
+        DisplayCurrentLine(currentDialogue);
 
         InventoryController.playerIsInteracting = true;
 
         Debug.Log("Empezó el diálogo");
+    }
+
+    private void SyncQuestState()
+    {
+        if (dialogueData.quest == null) return;
+
+        string questID = dialogueData.quest.questID;
+
+        //Future update add completing quest and handing in!
+        if(QuestController.Instance.IsQuestCompleted(questID) || QuestController.Instance.IsQuestHandedIn(questID))
+        {
+            questState = QuestState.Completed;
+        }
+        else if (QuestController.Instance.IsQuestActive(questID))
+        {
+            questState = QuestState.InProgress;
+        }
+        else
+        {
+            questState = QuestState.NotStarted;
+        }
     }
 
     void NextLine(string[] dialogue)
@@ -101,16 +154,45 @@ public class NPC : MonoBehaviour, IInteractable
         {
             //Skipear animación de texto
             StopAllCoroutines();
-            dialogueText.SetText(dialogue[dialogueIndex]);
+            dialogueUI.SetDialogueText(dialogue[dialogueIndex]);
             isTyping = false;
         }
-        else if(++dialogueIndex < dialogue.Length)
+
+        //Clear Choices
+        dialogueUI.ClearChoices();
+
+        //Check endDialogueLines
+        if(dialogueData.endDialogueLines.Length > dialogueIndex && dialogueData.endDialogueLines[dialogueIndex])
+        {
+            EndDialogue();
+            return;
+        }
+
+        //Check if choices & display
+        foreach(DialogueChoice dialogueChoice in dialogueData.choices)
+        {
+            if(dialogueChoice.dialogueIndex == dialogueIndex)
+            {
+                if (currentDialogue == dialogueData.dialogueLines)
+                {
+                    DisplayChoices(dialogueChoice);
+                    return;
+                }
+            }
+        }
+        
+        if(++dialogueIndex < dialogue.Length)
         {
             //Si hay otra línea, escribirla
-            StartCoroutine(TypeLine(dialogue));
+            DisplayCurrentLine(currentDialogue);
         }
         else
         {
+            if (giveItem == giveItemCase.EndDialogue && itemAlreadyGived == false)
+            {
+                InventoryController.Instance.AddItem(itemToGive);
+                itemAlreadyGived = true;
+            }
             EndDialogue();
         }
     }
@@ -118,11 +200,11 @@ public class NPC : MonoBehaviour, IInteractable
     IEnumerator TypeLine(string[] dialogue)
     {
         isTyping = true;
-        dialogueText.SetText("");
+        dialogueUI.SetDialogueText("");
 
         foreach (char letter in dialogue[dialogueIndex])
         {
-            dialogueText.text += letter;
+            dialogueUI.SetDialogueText(dialogueUI.dialogueText.text += letter);
             yield return new WaitForSeconds(dialogueData.typingSpeed);
         }
 
@@ -135,17 +217,73 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    public void EndDialogue()
+    void DisplayChoices(DialogueChoice choice)
+    {
+        if (choice.choices == null ||
+            choice.nextDialogueIndexes == null ||
+            choice.givesQuest == null)
+        {
+            Debug.LogError($"[NPC: {dialogueData.npcName}] DialogueChoice incompleto o nulo.");
+            return;
+        }
+
+        if (choice.choices.Length != choice.nextDialogueIndexes.Length ||
+            choice.choices.Length != choice.givesQuest.Length)
+        {
+            Debug.LogError($"[NPC: {dialogueData.npcName}] Inconsistencia de diálogos: choices ({choice.choices.Length}), nextIndexes ({choice.nextDialogueIndexes.Length}), givesQuest ({choice.givesQuest.Length})");
+            return;
+        }
+
+        for (int i = 0; i < choice.choices.Length; i++)
+        {
+            int nextIndex = choice.nextDialogueIndexes[i];
+            bool givesQuest = choice.givesQuest[i];
+
+            dialogueUI.CreateChoiceButton(choice.choices[i], () => ChooseOption(nextIndex, givesQuest));
+        }
+    }
+
+    void ChooseOption(int nextIndex, bool givesQuest)
+    {
+        if(givesQuest)
+        {
+            QuestController.Instance.AcceptQuest(dialogueData.quest);
+            questState = QuestState.InProgress;
+        }
+        dialogueIndex = nextIndex;
+        dialogueUI.ClearChoices();
+        DisplayCurrentLine(currentDialogue);
+    }
+
+    void DisplayCurrentLine(string[] dialogue)
     {
         StopAllCoroutines();
+        StartCoroutine(TypeLine(dialogue));
+    }
+
+    public void EndDialogue()
+    {
+        if (questState == QuestState.Completed && !QuestController.Instance.IsQuestHandedIn(dialogueData.quest.questID))
+        {
+            Debug.Log("La quest deberia terminar aqui");
+            HandleQuestCompletion(dialogueData.quest);
+        }
+
+        StopAllCoroutines();
         isDialogueActive = false;
-        dialogueText.SetText("");
-        dialoguePanel.SetActive(false);
+        dialogueUI.SetDialogueText("");
+        dialogueUI.ShowDialogueUI(false);
         if (InventoryController.inventoryIsOpen == false) {
-            PauseController.SetPause(dialoguePanel.activeSelf);
+            PauseController.SetPause(false);
         }
         
         InventoryController.playerIsInteracting = false;
         currentDialogue = dialogueData.dialogueLines;
+    }
+
+    void HandleQuestCompletion(Quest quest)
+    {
+        RewardsController.Instance.GiveQuestReward(quest);
+        QuestController.Instance.HandInQuest(quest.questID);
     }
 }

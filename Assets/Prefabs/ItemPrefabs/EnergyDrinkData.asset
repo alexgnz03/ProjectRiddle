@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01d71a478b4a2744887eb35f96c3ee66, type: 3}
+  m_Name: EnergyDrinkData
+  m_EditorClassIdentifier: 
+  itemName: "Bebida energ\xE9tica"
+  itemSprite: {fileID: 21300000, guid: 9a40d09a7aec4f947b64f90b481d92d0, type: 3}
+  itemDescription: "Debo d\xE1rsela a ese chaval lo antes posible, espero que su
+    informaci\xF3n merezca la pena."

@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac9454011825d049a88ddd361d4caa1, type: 3}
+  m_Name: SamuelDialogue
+  m_EditorClassIdentifier: 
+  npcName: Samuel
+  npcPortrait: {fileID: 0}
+  dialogueLines:
+  - "Hey hey, \xBFComo andamos?"
+  - "\xBFEh? \xBFQue eres el detective?"
+  - "\xBFCon esas pintas que me llevas?"
+  - "No te preocupes bro, d\xE9jamelo a mi, y t\xFA vete a casa."
+  - No, soy Samuel un placer.
+  - "\xA1Pero eso no importa ahora! el caso es que he estado investigando desde esta
+    ma\xF1ana y ya se qui\xE9n es el culpable, \xA1Estoy seguro!..."
+  - "\xA1Es el malvado due\xF1o del hotel! Despu\xE9s de lo de anoche le he visto
+    varias veces asomado en la ventana con una mirada siniestra."
+  - "\xA1Adem\xE1s ha cerrado la puerta con llave y ha colgado esa nota en ella!"
+  - "\xBFQue qu\xE9 pone? No s\xE9, no la he le\xEDdo."
+  - "(Tal vez deber\xEDa hacerlo, pero me da miedo acercarme a la puerta)"
+  - "\xA1Pero no hay duda! \xA1\xC9l es culpable!"
+  - "\xA1Nos vemos!"
+  correctObjectLines:
+  - "\xA1EEHHHH! \xA1\xBFHAS COGIDO EL PAPEL QUE HAB\xCDA EN LA PUERTA?!"
+  - "\xA1D\xE9jame ver!"
+  - "Mmm entiendo... \xA1ESPERA! \xA1\xBFCOMO QUE DE VACACIONES?!"
+  - Si hasta anoche estaban abiertos.
+  - Menos mal que tengo un amigo que hizo una copia de seguridad de la llave...
+  - "Eh, \xBFQue por qu\xE9?"
+  - Bueno... Eh... Por... Cosas.
+  - En fin, yo me retiro como detective definitivamente.
+  - "Mi amigo vive en esa casa verde de ah\xED, pero no te aseguro que te de la llave,
+    es bastante vago."
+  wrongObjectLines:
+  - "Oye, no me hagas perder el tiempo con tonter\xEDas."
+  autoProgressLines: 000000000000000000000000
+  endDialogueLines: 000000000000000000000100
+  autoProgressDelay: 1.5
+  typingSpeed: 0.02
+  voiceSound: {fileID: 0}
+  voicePitch: 1
+  choices:
+  - dialogueIndex: 3
+    choices:
+    - "\xBFEres detective?"
+    - Vale, chau.
+    nextDialogueIndexes: 040000000b000000
+    givesQuest: 0000
+  - dialogueIndex: 5
+    choices:
+    - "\xBFY qui\xE9n es?"
+    - Vale, chau.
+    nextDialogueIndexes: 060000000b000000
+    givesQuest: 0000
+  questIntProgressIndex: 0
+  questCompletedIndex: 0
+  quest: {fileID: 0}

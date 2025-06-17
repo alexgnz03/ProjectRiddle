@@ -47,7 +47,11 @@ public class PlayerAnimation : MonoBehaviour, AnimationInterface
         if (timer >= 1f / frameRate)
         {
             timer -= 1f / frameRate;
-            currentFrame = (currentFrame + 1) % currentAnimationFrames.Length;
+            currentFrame++;
+            if (currentFrame >= currentAnimationFrames.Length || currentFrame == 0)
+            {
+                currentFrame = 1;
+            }
             spriteRenderer.sprite = currentAnimationFrames[currentFrame];
         }
     }

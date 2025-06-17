@@ -6,5 +6,10 @@ using UnityEngine.UI;
 public class Item : MonoBehaviour
 {
     public ItemData itemData;
+    public int ID;
+    public string Name;
+    public int quantity = 1;
+
+
 }
 

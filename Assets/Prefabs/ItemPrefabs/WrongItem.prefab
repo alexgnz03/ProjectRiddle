@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -5082305198568281937}
   m_Layer: 5
   m_Name: WrongItem
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,6 +60,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: d551528fa74af94438aec1abebf586e2, type: 2}
+  ID: 0
+  Name: Wrong Item
+  quantity: 1
 --- !u!114 &-5082305198568281937
 MonoBehaviour:
   m_ObjectHideFlags: 0
