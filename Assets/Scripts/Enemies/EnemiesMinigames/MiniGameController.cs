@@ -23,6 +23,8 @@ public class MiniGameController : MonoBehaviour
 
     private float enemyYPos;  // altura fija donde están los enemigos dentro del miniCanvas
 
+    public GameObject wrongObject;
+
     void Start()
     {
         //Desactivar Dialogue
@@ -194,7 +196,7 @@ public class MiniGameController : MonoBehaviour
                     else
                     {
                         FightStateController.Instance.AddProgress(-10);
-                        Enemy.Instance.ShowObject(gameObject);
+                        Enemy.Instance.ShowObject(wrongObject);
                         Enemy.Instance.DialogueEnabled(true);
                     }
 
